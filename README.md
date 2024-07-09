@@ -1,6 +1,6 @@
 # Embedded Swift Development for Raspberry Pi Pico using Docker
 
-This repository provides a Docker-based setup for developing embedded Swift applications for the Raspberry Pi Pico and Pico W microcontrollers. The instructions below guide you through building and running a Docker container and compiling blink examples for the Raspberry Pi Pico and Pico W.
+This repository provides a Docker-based setup for developing embedded Swift applications for the Raspberry Pi Pico and Pico W microcontrollers using [Raspberry Pi Pico SDK](https://github.com/raspberrypi/pico-sdk.git). The instructions below guide you through building and running a Docker container and compiling [Embedded Swift Examples](https://github.com/apple/swift-embedded-examples.git) for the Raspberry Pi Pico and Pico W.
 
 ## Prerequisites
 
@@ -60,36 +60,17 @@ Follow these steps to compile the blink example for the Raspberry Pi Pico:
     cd /root/pico/swift-embedded-examples/pico-blink-sdk
     ```
 
-2. Edit the `CMakeLists.txt` file:
+2. Set the target board and generate build files with CMake:
     ```sh
-    nano CMakeLists.txt
+    cmake -B build -G Ninja -S . -D PICO_BOARD=pico
     ```
 
-3. Comment out the line:
-    ```cmake
-    execute_process(COMMAND xcrun -f swiftc OUTPUT_VARIABLE SWIFTC OUTPUT_STRIP_TRAILING_WHITESPACE)
-    ```
-    and add the following line:
-    ```cmake
-    set(SWIFTC /usr/bin/swiftc)
-    ```
-
-4. Set the target board:
-    ```sh
-    export PICO_BOARD=pico
-    ```
-
-5. Generate build files with CMake:
-    ```sh
-    cmake -B build -G Ninja .
-    ```
-
-6. Build the project:
+3. Build the project:
     ```sh
     cmake --build build
     ```
 
-7. Copy the generated UF2 file to the mounted directory:
+4. Copy the generated UF2 file to the mounted directory:
     ```sh
     cp build/swift-blinky.uf2 /mnt/swift-blinky-pico.uf2
     ```
@@ -103,36 +84,17 @@ Follow these steps to compile the blink example for the Raspberry Pi Pico W:
     cd /root/pico/swift-embedded-examples/pico-w-blink-sdk
     ```
 
-2. Edit the `CMakeLists.txt` file:
+2. Set the target board and generate build files with CMake:
     ```sh
-    nano CMakeLists.txt
+    cmake -B build -G Ninja -S . -D PICO_BOARD=pico_w
     ```
 
-3. Comment out the line:
-    ```cmake
-    execute_process(COMMAND xcrun -f swiftc OUTPUT_VARIABLE SWIFTC OUTPUT_STRIP_TRAILING_WHITESPACE)
-    ```
-    and add the following line:
-    ```cmake
-    set(SWIFTC /usr/bin/swiftc)
-    ```
-
-4. Set the target board:
-    ```sh
-    export PICO_BOARD=pico_w
-    ```
-
-5. Generate build files with CMake:
-    ```sh
-    cmake -B build -G Ninja .
-    ```
-
-6. Build the project:
+3. Build the project:
     ```sh
     cmake --build build
     ```
 
-7. Copy the generated UF2 file to the mounted directory:
+4. Copy the generated UF2 file to the mounted directory:
     ```sh
     cp build/swift-blinky.uf2 /mnt/swift-blinky-pico-w.uf2
     ```
@@ -151,7 +113,3 @@ docker start -i swift-embedded-pico
 - Connect the Pico or Pico W board via a USB cable to your computer, and make sure it's in the USB Mass Storage firmware upload mode (either hold the BOOTSEL button while plugging the board, or make sure your Flash memory doesn't contain any valid firmware).
 - Copy the UF2 firmware to the Mass Storage device.
 - The green LED should now be blinking in a pattern.
-
-## Acknowledgments
-- [swift-embedded-examples](https://github.com/apple/swift-embedded-examples.git)
-- [pico-sdk](https://github.com/raspberrypi/pico-sdk.git)
